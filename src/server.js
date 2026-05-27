@@ -7,8 +7,13 @@ import { router as apiRoutes } from "./routes/index.js";
 import { connectDB } from "./config/mongodb.js";
 import { connectSupabase } from "./config/supabase.js";
 
+import helmet from "helmet";
+import { limiter } from "./middlewares/ratelimiter.js";
+
+
 const app = express();
 
+app.use(helmet())
 const corsOptions = {
   origin: [
     "http://localhost:5173",
@@ -19,7 +24,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use(limiter);
 app.use(express.json());
 app.use(cookieParser());
 
